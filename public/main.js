@@ -1,5 +1,7 @@
 // const { getCurrentWindow } = require('@electron/remote/main');
 const {BrowserWindow, app, dialog} = require('electron');
+const ipc = require('electron').ipcMain;
+const fileService = require('../src/services/FileService').getInstance();
 
 require('@electron/remote/main').initialize();
 
@@ -10,13 +12,29 @@ function createWindow() {
         webPreferences: {
             enableRemoteModule: true,
             nodeIntegration: true,
+            contextIsolation: false
         }
     })
 
     win.loadURL('http://localhost:3000');
-    console.log(dialog.showOpenDialog({properties: ['openFile', 'multiSelections']}));
 
 }
+
+ipc.on('chooseFile', (event, data) => {
+    if(!!data)
+    {
+        dialog.showOpenDialog({properties: ['openFile']}).then((result) => {
+            if(result.canceled === false && result.filePaths.length === 1)
+            {
+                ipc.emit('fileText', fileService.readFileText(result.filePaths[0]));
+            }
+            console.log(result);
+        });
+    }
+    
+})
+
+
 
 app.on('ready', createWindow)
 

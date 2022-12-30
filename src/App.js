@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button } from 'reactstrap';
+// import { IpcRenderer, ipcRenderer } from '@electron/remote/main';
 
 // const fs = document.require('fs');
 // const pathModule = document.require('path');
@@ -8,34 +11,22 @@ import { useState } from 'react';
 // const {app} = document.require('@electron/remote');
 // const { dialog } = document.require('electron');
 
-
+const ipcRenderer = window.require('electron').ipcRenderer;
 
 function App() {
 
-  // const [path, setPath] = useState(app.getPath());
-  // const files = fs.readdirSync(path).map(file=>{
-  //   const stats = fs.statSync(pathModule.join(path, file));
-  //   return {
-  //     name: file,
-  //     size: stats.isFile() ? formatSize(stats.size ?? 0) : null,
-  //     directory: stats.isDirectory()
-  //   }
-  // })
 
   
   return (
     <div className="App">
-      <button
+      <Button
       id='choose-file-button'
-      onClick={async () => {
-        // dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }).then((result) => {
-        //   console.log(result);
-        // })
-        
+      onClick={() => {
+        ipcRenderer.send('chooseFile', true);
       }}
       >
-        choose file
-      </button>
+        Escolha seu arquivo de texto
+      </Button>
     </div>
   );
 }
