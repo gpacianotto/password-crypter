@@ -1,7 +1,7 @@
 // const { getCurrentWindow } = require('@electron/remote/main');
 const {BrowserWindow, app, dialog} = require('electron');
 const ipc = require('electron').ipcMain;
-const fileService = require('../src/services/FileService').getInstance();
+//const fileService = require('../src/services/FileService').getInstance();
 
 require('@electron/remote/main').initialize();
 
@@ -26,13 +26,16 @@ ipc.on('chooseFile', (event, data) => {
         dialog.showOpenDialog({properties: ['openFile']}).then((result) => {
             if(result.canceled === false && result.filePaths.length === 1)
             {
-                ipc.emit('fileText', fileService.readFileText(result.filePaths[0]));
+                
+                //console.log(JSON.stringify(fileService.readFileText(result.filePaths[0])))
+                event.reply('fileText', {path: result.filePaths[0]});
             }
-            console.log(result);
         });
     }
     
 })
+
+// ipc.on('closeFile', ())
 
 
 

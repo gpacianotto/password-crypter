@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = window.require('fs');
 
 module.exports = class FileService {
     static instance;
@@ -12,9 +12,9 @@ module.exports = class FileService {
     }
 
 
-    async readFileText(path) {
+    readFileText(path) {
         console.log("Loading File");
 
-        return fs.readFileSync(path).toString();
+        return fs.readFileSync(path).toString().split(String.fromCharCode(10));
     }
 }
